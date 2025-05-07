@@ -1,0 +1,43 @@
+{
+  "name": "@lyncworld/metamask-connect-sdk",
+  "private": false,
+  "version": "0.0.0-beta.0",
+  "author": {
+    "name": "LYNC WORLD",
+    "url": "https://www.lync.world"
+  },
+  "description": "LYNC MetaMask wallet integration SDK for integrating MetaMask wallets inside any dapp in a few lines of code.",
+  "keywords": [
+    "Web3",
+    "MetaMask",
+    "Wallet",
+    "Ethereum",
+    "LYNC",
+    "Web3 Wallet",
+    "MetaMask SDK",
+    "SDK"
+  ],
+  "module": "./build/index.js",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LYNC-WORLD/Metamask-SDK-NPM"
+  },
+  "homepage": "https://github.com/LYNC-WORLD/Metamask-SDK-NPM",
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "18",
+    "prettier": "^3.4.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "ethers": "^5.7.0",
+    "react": "18"
+  }
+}

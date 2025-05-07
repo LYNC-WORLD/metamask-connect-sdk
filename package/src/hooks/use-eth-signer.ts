@@ -1,0 +1,14 @@
+import { useMemo } from 'react';
+import { ethers } from 'ethers';
+import { useMetaMask } from './use-metamask';
+
+export const useEthSigner = () => {
+  const { provider } = useMetaMask();
+
+  const signer = useMemo(() => {
+    if (!provider) return undefined;
+    return new ethers.providers.Web3Provider(provider).getSigner();
+  }, [provider]);
+
+  return signer;
+};

@@ -1,0 +1,24 @@
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  scroll-behavior: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  font: inherit;
+}
+
+.LYNCMetaMaskConnectSDK__metamask_connect_btn {
+}
+
+.LYNCMetaMaskConnectSDK__connected_address {
+}
