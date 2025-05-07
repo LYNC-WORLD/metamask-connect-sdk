@@ -1,4 +1,4 @@
-import { EIP6963AnnounceProviderEvent, EIP6963ProviderDetail } from '@/types';
+import type { EIP6963AnnounceProviderEvent, EIP6963ProviderDetail } from '@/types';
 
 let providers: Array<EIP6963ProviderDetail> = [];
 

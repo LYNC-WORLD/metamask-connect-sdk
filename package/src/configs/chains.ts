@@ -1,5 +1,5 @@
 import { SupportedChains } from '@/enums';
-import { MetamaskAddChainConfigurations } from '@/types';
+import type { MetamaskAddChainConfigurations } from '@/types';
 
 export const Chain_Configurations = {
   [SupportedChains.EthereumMainnet]: {

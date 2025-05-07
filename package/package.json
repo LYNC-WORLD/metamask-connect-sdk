@@ -1,7 +1,7 @@
 {
   "name": "@lyncworld/metamask-connect-sdk",
   "private": false,
-  "version": "0.0.0-beta.0",
+  "version": "0.0.0-beta.5",
   "author": {
     "name": "LYNC WORLD",
     "url": "https://www.lync.world"
@@ -23,9 +23,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LYNC-WORLD/Metamask-SDK-NPM"
+    "url": "https://github.com/LYNC-WORLD/metamask-connect-sdk"
   },
-  "homepage": "https://github.com/LYNC-WORLD/Metamask-SDK-NPM",
+  "homepage": "https://github.com/LYNC-WORLD/metamask-connect-sdk/blob/main/README.md",
   "scripts": {
     "build": "tsup"
   },

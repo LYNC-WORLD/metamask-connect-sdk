@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { ethers } from 'ethers';
-import { useMetaMask } from './use-metamask';
+import { useMetaMask } from '@/contexts';
 
 export const useEthSigner = () => {
   const { provider } = useMetaMask();
