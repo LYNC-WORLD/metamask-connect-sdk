@@ -1,7 +1,7 @@
 {
-  "name": "@lyncworld/metamask-connect-sdk",
+  "name": "lync-wallet-sdk",
   "private": false,
-  "version": "0.0.0-beta.5",
+  "version": "2.0.0",
   "author": {
     "name": "LYNC WORLD",
     "url": "https://www.lync.world"

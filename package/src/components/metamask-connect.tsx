@@ -6,13 +6,13 @@ import { collapseAddress } from '@/utils';
 
 export const MetamaskConnect: React.FC = () => {
   const { account } = useAccount();
-  const { connect } = useConnect();
+  const { isConnecting, connect } = useConnect();
   const { copied, copyToClipboard } = useCopy();
 
   return (
     <React.Fragment>
       {!account && (
-        <button className="LYNCMetaMaskConnectSDK__metamask_connect_btn" onClick={connect}>
+        <button disabled={isConnecting} className="LYNCMetaMaskConnectSDK__metamask_connect_btn" onClick={connect}>
           Connect Metamask
         </button>
       )}
