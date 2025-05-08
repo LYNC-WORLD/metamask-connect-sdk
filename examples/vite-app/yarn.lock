@@ -805,14 +805,6 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@lyncworld/metamask-connect-sdk@^0.0.0-beta.5":
-  version "0.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@lyncworld/metamask-connect-sdk/-/metamask-connect-sdk-0.0.0-beta.5.tgz#9345eeafd504d670226268f3d4a912aa956fd0cb"
-  integrity sha512-+JweyjFADVf3o0usp37HhsZDGiz42Qct0X6PXIGmcu9HrBJ0GNiy60o0tqd0Fzo46FEgoOTE7ijfZ84Fbjjzeg==
-  dependencies:
-    ethers "^5.7.0"
-    react "18"
-
 "@modelcontextprotocol/sdk@^1.8.0":
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.11.0.tgz#9f1762efe6f3365f0bf3b019cc9bd1629d19bc50"
@@ -2463,6 +2455,14 @@ lucide-react@^0.507.0:
   version "0.507.0"
   resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.507.0.tgz#d93a75ed130bd530a368fe1dd4ea009ea90a772b"
   integrity sha512-XfgE6gvAHwAtnbUvWiTTHx4S3VGR+cUJHEc0vrh9Ogu672I1Tue2+Cp/8JJqpytgcBHAB1FVI297W4XGNwc2dQ==
+
+lync-wallet-sdk@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/lync-wallet-sdk/-/lync-wallet-sdk-2.0.0.tgz#4b238568ed427c5dc98e79243d7f52b56d94114f"
+  integrity sha512-3+daCIAAPQU9VExOOZ2DejoXo4BkJFwsDBhCjffcYbOiRIG/LooL+6A4ML4pJwCGBg33QEdftav/B5dE5/J31g==
+  dependencies:
+    ethers "^5.7.0"
+    react "18"
 
 math-intrinsics@^1.1.0:
   version "1.1.0"

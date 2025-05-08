@@ -1,11 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import {
-  MetamaskConnect,
-  SupportedChains,
-  useAccount,
-  useDisconnect,
-  useNetwork,
-} from '@lyncworld/metamask-connect-sdk';
+import { MetamaskConnect, SupportedChains, useAccount, useDisconnect, useNetwork } from 'lync-wallet-sdk';
 import { MdOutlineLogout } from 'react-icons/md';
 import { AppLayout } from './components/layouts';
 import { Button } from './components/ui/button';
@@ -48,7 +42,7 @@ export const MetaMaskConnectExample: React.FC = () => {
 
 export const SwitchNetwork: React.FC = () => {
   const { account } = useAccount();
-  const { chainId, switchNetwork } = useNetwork();
+  const { chainId, isSwitchingNetwork, switchNetwork } = useNetwork();
 
   const connectedChain = useMemo(
     () => [...Testnet_Chains, ...Mainnet_Chains].find((chain) => chain.id === chainId),
@@ -56,8 +50,8 @@ export const SwitchNetwork: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!connectedChain) switchNetwork(SupportedChains.EthereumMainnet);
-  }, [connectedChain, switchNetwork]);
+    if (chainId && !connectedChain) switchNetwork(SupportedChains.EthereumMainnet);
+  }, [chainId, connectedChain, switchNetwork]);
 
   if (!account) return null;
 
@@ -67,11 +61,15 @@ export const SwitchNetwork: React.FC = () => {
         <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
           Connected Network
         </span>
-        <p className="mt-1 border-t pt-1">{connectedChain?.label ?? 'Unsupported Network'}</p>
+        <p className="mt-1 border-t pt-1">{connectedChain?.label ?? '-'}</p>
       </div>
       <DropdownMenu>
-        <DropdownMenuTrigger className="mt-3 text-sm border py-2 px-3 rounded-md bg-muted w-full text-left">
-          Switch Network
+        <DropdownMenuTrigger
+          disabled={isSwitchingNetwork}
+          className="mt-3 text-sm border py-2 px-3 rounded-md bg-muted w-full text-left"
+        >
+          {!isSwitchingNetwork && 'Switch Network'}
+          {isSwitchingNetwork && 'Switching Network...'}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[286px]">
           <DropdownMenuLabel>Supported Networks</DropdownMenuLabel>
