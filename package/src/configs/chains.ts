@@ -1,5 +1,5 @@
 import { SupportedChains } from '@/enums';
-import type { MetamaskAddChainConfigurations } from '@/types';
+import type { SupportedChainConfigurations } from '@/types';
 
 export const Chain_Configurations = {
   [SupportedChains.EthereumMainnet]: {
@@ -266,4 +266,4 @@ export const Chain_Configurations = {
       decimals: 18,
     },
   },
-} as const satisfies MetamaskAddChainConfigurations;
+} as const satisfies SupportedChainConfigurations;

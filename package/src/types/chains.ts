@@ -7,11 +7,15 @@ export type ChainNativeCurrency = {
 };
 
 export type MetamaskAddChainConfigurations = {
-  [K in SupportedChains]: {
+  chainId: `0x${string}`;
+  chainName: string;
+  blockExplorerUrls: Array<string>;
+  rpcUrls: Array<string>;
+  nativeCurrency: ChainNativeCurrency;
+};
+
+export type SupportedChainConfigurations = {
+  [K in SupportedChains]: Omit<MetamaskAddChainConfigurations, 'chainId'> & {
     chainId: K;
-    chainName: string;
-    blockExplorerUrls: Array<string>;
-    rpcUrls: Array<string>;
-    nativeCurrency: ChainNativeCurrency;
   };
 };

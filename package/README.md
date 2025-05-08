@@ -2,16 +2,6 @@
 
 LYNC MetaMask wallet integration SDK for integrating MetaMask wallets inside any dapp in a few lines of code.
 
-![image](https://github.com/user-attachments/assets/f6599f1b-92a2-4e69-b68d-943632a495eb)
-![image](https://github.com/user-attachments/assets/1704f50b-5937-4dfd-a0a6-757920622194)
-
-## Important Links
-
-- [View documentation](https://github.com/LYNC-WORLD/metamask-connect-sdk/blob/main/README.md)
-- [Package link on npmjs](https://www.npmjs.com/package/lync-wallet-sdk)
-- [View code on GitHub](https://github.com/LYNC-WORLD/metamask-connect-sdk)
-- [View example application codes on GitHub](https://github.com/LYNC-WORLD/metamask-connect-sdk/tree/main/examples)
-
 ## Prerequisites
 
 Before you begin integrating Fuel marketplace SDK, make sure you have the following prerequisites:
@@ -408,11 +398,3 @@ type EIP1193Provider = {
 | Arbitrum Sepolia Testnet | 0x66eee  |
 | Optimism Sepolia Testnet | 0xaa37dc |
 | Saigon Testnet           | 0x7e5    |
-
-## Support
-
-If you encounter any issues or have any questions, feel free to reach out to our support team for assistance. We are always here to help you with any queries or concerns you may have.
-
-- [Telegram](https://t.me/lyncgg)
-- [Discord](https://discord.com/invite/lyncworld)
-- [Email](mailto:team@lync.world)
