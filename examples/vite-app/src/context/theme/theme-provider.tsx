@@ -9,7 +9,7 @@ type ThemeProviderProps = {
 
 export const ThemeProvider: React.FC<Readonly<ThemeProviderProps>> = ({ children, defaultTheme, ...props }) => {
   const [theme, setTheme] = useState<ThemeProviderStates['theme']>(
-    () => (localStorage.getItem('@lync-analytics-dashboard/app-theme') as Theme) || defaultTheme
+    () => (localStorage.getItem('@lync-metamask-connect-example/app-theme') as Theme) || defaultTheme
   );
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const ThemeProvider: React.FC<Readonly<ThemeProviderProps>> = ({ children
       ({
         theme,
         setTheme: (theme: Theme) => {
-          localStorage.setItem('@lync-analytics-dashboard/app-theme', theme);
+          localStorage.setItem('@lync-metamask-connect-example/app-theme', theme);
           setTheme(theme);
         },
       } as const satisfies ThemeProviderStates),

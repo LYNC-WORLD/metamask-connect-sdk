@@ -1,6 +1,6 @@
 # Metamask Wallet Connect SDK
 
-Demo dApp: https://metamask-example.lync.world/
+Demo dApp: <https://metamask-example.lync.world/>
 
 LYNC MetaMask wallet integration SDK for integrating MetaMask wallets inside any dapp in a few lines of code.
 
