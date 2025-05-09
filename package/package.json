@@ -1,7 +1,7 @@
 {
   "name": "lync-wallet-sdk",
   "private": false,
-  "version": "2.0.1",
+  "version": "2.0.2",
   "author": {
     "name": "LYNC WORLD",
     "url": "https://www.lync.world"
@@ -25,7 +25,7 @@
     "type": "git",
     "url": "https://github.com/LYNC-WORLD/metamask-connect-sdk"
   },
-  "homepage": "https://github.com/LYNC-WORLD/metamask-connect-sdk/blob/main/README.md",
+  "homepage": "https://metamask-example.lync.world/",
   "scripts": {
     "build": "tsup"
   },

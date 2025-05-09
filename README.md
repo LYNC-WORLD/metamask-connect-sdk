@@ -10,7 +10,7 @@ LYNC MetaMask wallet integration SDK for integrating MetaMask wallets inside any
 - [View documentation](https://github.com/LYNC-WORLD/metamask-connect-sdk/blob/main/README.md)
 - [Package link on npmjs](https://www.npmjs.com/package/lync-wallet-sdk)
 - [View code on GitHub](https://github.com/LYNC-WORLD/metamask-connect-sdk)
-- [View example application codes on GitHub](https://github.com/LYNC-WORLD/metamask-connect-sdk/tree/main/examples)
+- [View example application](https://metamask-example.lync.world/)
 
 ## Prerequisites
 
