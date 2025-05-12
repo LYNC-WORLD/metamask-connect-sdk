@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
-import { MetamaskConnect, SupportedChains, useAccount, useDisconnect, useNetwork } from 'lync-wallet-sdk';
+import React, { useEffect, useMemo, useState } from 'react';
+import { MetamaskConnect, SupportedChains, useAccount, useDisconnect, useNetwork, useWallet } from 'lync-wallet-sdk';
+import { Check, Files } from 'lucide-react';
 import { MdOutlineLogout } from 'react-icons/md';
 import { AppLayout } from './components/layouts';
-import { Button } from './components/ui/button';
+import { Button, buttonVariants } from './components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +13,39 @@ import {
   DropdownMenuTrigger,
 } from './components/ui/dropdown-menu';
 import { Mainnet_Chains, Testnet_Chains } from './constants';
+import { useCopy } from './hooks';
+import { cn, getSigningMessage } from './lib/utils';
 
 export const MetaMaskConnectExample: React.FC = () => {
   const { account } = useAccount();
   const { disconnect } = useDisconnect();
+  const { wallet } = useWallet();
+  const { chainId } = useNetwork();
+  const { copied, copyToClipboard } = useCopy();
+
+  const [signingMessage, setSigningMessage] = useState<boolean>(false);
+  const [signedMessage, setSignedMessage] = useState<string | null>(null);
+
+  const signMessage = async () => {
+    if (!wallet || !account) return;
+
+    setSigningMessage(true);
+    const signingMessage = getSigningMessage(account, chainId);
+    const message = `0x${Buffer.from(signingMessage, 'utf8').toString('hex')}`;
+    try {
+      const signature = (await wallet.request({
+        method: 'personal_sign',
+        params: [message, account],
+      })) as string;
+
+      setSignedMessage(signature);
+    } catch (error) {
+      console.error(error);
+      setSignedMessage(null);
+    } finally {
+      setSigningMessage(false);
+    }
+  };
 
   return (
     <AppLayout>
@@ -35,7 +65,40 @@ export const MetaMaskConnectExample: React.FC = () => {
           </Button>
         )}
       </div>
-      <SwitchNetwork />
+      <div className="flex flex-col md:flex-row md:gap-4">
+        <SwitchNetwork />
+        {account && (
+          <div className="flex w-[320px] flex-col gap-2 md:gap-4 mt-4">
+            {
+              <div className="border flex-1 rounded-md p-4 bg-muted/50 flex flex-col">
+                <button
+                  className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase flex items-center justify-between disabled:cursor-default"
+                  disabled={!signedMessage}
+                  onClick={(event) => copyToClipboard(event, signedMessage ?? '')}
+                >
+                  <span>Signed Message</span>
+                  {copied ? <Check size={15} /> : <Files size={15} />}
+                </button>
+                <p
+                  className={cn('mt-1 text-sm border-t break-words pt-1', {
+                    'text-muted-foreground/50 text-[13px]': !signedMessage,
+                  })}
+                >
+                  {signedMessage ?? 'Your signed message will appear here...'}
+                </p>
+              </div>
+            }
+            <Button
+              disabled={signingMessage}
+              onClick={signMessage}
+              className="w-full"
+              style={{ color: 'oklch(21.6% 0.006 56)' }}
+            >
+              {signingMessage ? 'Signing Message...' : 'Sign Message'}
+            </Button>
+          </div>
+        )}
+      </div>
     </AppLayout>
   );
 };
@@ -56,17 +119,24 @@ export const SwitchNetwork: React.FC = () => {
   if (!account) return null;
 
   return (
-    <div className="mt-8 w-[320px] border rounded-md p-4 bg-muted/50">
-      <div className="flex flex-col">
-        <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
-          Connected Network
-        </span>
-        <p className="mt-1 border-t pt-1">{connectedChain?.label ?? '-'}</p>
+    <div className="flex w-[320px] flex-col gap-2 md:gap-4 mt-4">
+      <div className="w-full border flex-1 rounded-md p-4 bg-muted/50">
+        <div className="flex flex-col">
+          <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
+            Connected Network
+          </span>
+          <p className="mt-1 border-t pt-1">{connectedChain?.label ?? '-'}</p>
+        </div>
+        <div className="flex mt-3 flex-col">
+          <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">Chain ID</span>
+          <p className="mt-1 border-t pt-1">{chainId ?? '-'}</p>
+        </div>
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger
           disabled={isSwitchingNetwork}
-          className="mt-3 text-sm border py-2 px-3 rounded-md bg-muted w-full text-left"
+          className={cn('w-full', buttonVariants({ variant: 'default' }))}
+          style={{ color: 'oklch(21.6% 0.006 56)' }}
         >
           {!isSwitchingNetwork && 'Switch Network'}
           {isSwitchingNetwork && 'Switching Network...'}
