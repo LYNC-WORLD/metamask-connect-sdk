@@ -5,6 +5,7 @@ import './index.css';
 import { ThemeProvider } from './context/theme';
 import { MetaMaskConnectExample } from './app';
 import LYNCMetaMaskProvider from 'lync-wallet-sdk';
+import { Toaster } from 'react-hot-toast';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,5 +14,6 @@ createRoot(document.getElementById('root')!).render(
         <MetaMaskConnectExample />
       </LYNCMetaMaskProvider>
     </ThemeProvider>
+    <Toaster position="top-right" reverseOrder />
   </StrictMode>
 );

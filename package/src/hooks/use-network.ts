@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
 import { Chain_Configurations } from '@/configs';
 import { useMetaMask } from '@/contexts';
-import { SupportedChains } from '@/enums';
-import type { MetamaskAddChainConfigurations, NetworkSwitchError } from '@/types';
+import { MetaMaskFunctionErrorCodes, SupportedChains } from '@/enums';
+import type { MetamaskAddChainConfigurations, MetaMaskFunctionReturn, MetaMaskWalletError } from '@/types';
+import { parseError } from '@/utils';
 
 export const useNetwork = () => {
   const { provider, chainId } = useMetaMask();
   const [isSwitchingNetwork, setIsSwitchingNetwork] = useState<boolean>(false);
 
   const switchNetwork = React.useCallback(
-    async (chainToConnect: SupportedChains, metamaskChainConfigurations?: MetamaskAddChainConfigurations) => {
-      if (!provider) return false;
-      if (chainId === chainToConnect) return true;
+    async (
+      chainToConnect: SupportedChains,
+      metamaskChainConfigurations?: MetamaskAddChainConfigurations
+    ): Promise<MetaMaskFunctionReturn> => {
+      if (!provider)
+        return {
+          success: false,
+          errorData: {
+            code: MetaMaskFunctionErrorCodes.MetaMaskProviderNotFound,
+            message: 'MetaMask provider not found! Please install metamask from: https://metamask.io/download/',
+          },
+        };
+
+      if (chainId === chainToConnect) return { success: true };
 
       setIsSwitchingNetwork(true);
       try {
@@ -20,15 +32,19 @@ export const useNetwork = () => {
           params: [{ chainId: chainToConnect }],
         });
 
-        return true;
+        return { success: true };
       } catch (switchError: unknown) {
-        if ((switchError as NetworkSwitchError).code === 4902) {
+        if ((switchError as MetaMaskWalletError).code === 4902) {
           const chainConfigurations = metamaskChainConfigurations ?? Chain_Configurations[chainToConnect];
           if (!chainConfigurations) {
-            console.error(
-              'Error switching network: Chain configurations not found for request chain. Try providing a valid chain configuration manually for request chain.'
-            );
-            return false;
+            return {
+              success: false,
+              errorData: {
+                code: MetaMaskFunctionErrorCodes.MetaMaskAddNetworkError,
+                message:
+                  'Add network error: Chain configurations not found for request chain. Try providing a valid chain configuration manually for request chain.',
+              },
+            };
           }
 
           try {
@@ -37,14 +53,27 @@ export const useNetwork = () => {
               params: [chainConfigurations],
             });
 
-            return true;
+            return { success: true };
           } catch (addError: unknown) {
-            console.error('Error adding network to metamask:', addError);
-            return false;
+            return {
+              success: false,
+              errorData: {
+                error: addError,
+                code: MetaMaskFunctionErrorCodes.MetaMaskAddNetworkError,
+                message: `Add network error: ${parseError(addError, 'Error adding network to MetaMask.')}`,
+              },
+            };
           }
         }
-        console.error('Error switching network:', switchError);
-        return false;
+
+        return {
+          success: false,
+          errorData: {
+            error: switchError,
+            code: MetaMaskFunctionErrorCodes.MetaMaskSwitchNetworkError,
+            message: `Switch network error: ${parseError(switchError, 'Error switching network.')}`,
+          },
+        };
       } finally {
         setIsSwitchingNetwork(false);
       }

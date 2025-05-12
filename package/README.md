@@ -80,22 +80,39 @@ This SDK provides different hooks to connect user's metamask wallet to your dapp
 
 ```tsx
 import React from 'react';
-import { collapseAddress, useAccount, useConnect, useDisconnect } from 'lync-wallet-sdk';
+import { collapseAddress, MetaMaskFunctionErrorCodes, useAccount, useConnect, useDisconnect } from 'lync-wallet-sdk';
 
 const MetaMaskConnectExample: React.FC = () => {
   const { account } = useAccount();
   const { isConnecting, connect } = useConnect();
   const { disconnect } = useDisconnect();
 
+  const connectToMetaMask = async () => {
+    const response = await connect();
+    if (response.success) return;
+
+    if (response.errorData.code === MetaMaskFunctionErrorCodes.MetaMaskProviderNotFound) {
+      window.open('https://metamask.io/download/', '_blank');
+      return;
+    }
+
+    console.error('Error connecting to metamask: ', response.errorData);
+  };
+
+  const disconnectMetaMask = async () => {
+    const response = await disconnect();
+    if (!response.success) console.error(response.errorData);
+  };
+
   return (
     <div>
       {!account && (
-        <button disabled={isConnecting} onClick={connect}>
+        <button disabled={isConnecting} onClick={connectToMetaMask}>
           Connect Metamask
         </button>
       )}
       {account && <span>{collapseAddress(account)}</span>}
-      {account && <button onClick={disconnect}>Disconnect</button>}
+      {account && <button onClick={disconnectMetaMask}>Disconnect</button>}
     </div>
   );
 };
@@ -105,15 +122,34 @@ Additionally, the SDK provides a `MetamaskConnect` component which wraps the con
 
 ```tsx
 import React from 'react';
-import { MetamaskConnect, useAccount, useDisconnect } from 'lync-wallet-sdk';
+import { MetamaskConnect, MetaMaskFunctionErrorCodes, useAccount, useDisconnect } from 'lync-wallet-sdk';
+
+type MetaMaskConnectionError = {
+  error?: E;
+  code: MetaMaskFunctionErrorCodes;
+  message: string;
+};
 
 const MetaMaskConnectExample: React.FC = () => {
   const { account } = useAccount();
   const { disconnect } = useDisconnect();
 
+  const onConnectionSuccess = () => {
+    console.info('MetaMask connected successfully.');
+  };
+
+  const onConnectionError = (error: MetaMaskConnectionError) => {
+    if (errorData.code === MetaMaskFunctionErrorCodes.MetaMaskProviderNotFound) {
+      console.error('Please install MetaMask: https://metamask.io/download/');
+      window.open('https://metamask.io/download/', '_blank');
+    } else {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
-      <MetamaskConnect />
+      <MetamaskConnect onSuccess={onConnectionSuccess} onError={onConnectionError} />
       {account && <button onClick={disconnect}>Disconnect</button>}
     </div>
   );
@@ -191,7 +227,7 @@ Switch networks:
 
 ```tsx
 import React, { useMemo } from 'react';
-import { useAccount, useNetwork } from 'lync-wallet-sdk';
+import { SupportedChains, useAccount, useNetwork } from 'lync-wallet-sdk';
 import { Mainnet_Chains, Testnet_Chains } from './chains';
 
 const NetworkSwitcher: React.FC = () => {
@@ -203,18 +239,25 @@ const NetworkSwitcher: React.FC = () => {
     [chainId]
   );
 
+  const switchMetaMaskNetwork = async (chainIdToConnect: SupportedChains) => {
+    const response = await switchNetwork(chainIdToConnect);
+    if (!response.success) {
+      console.error(response.errorData.message);
+    }
+  };
+
   if (!account) return null;
 
   return (
     <div>
       <p>Connected Network: {connectedChain?.label ?? 'Unsupported Network'}</p>
       {Mainnet_Chains.map((chain) => (
-        <button key={chain.id} disabled={isSwitchingNetwork} onClick={() => switchNetwork(chain.id)}>
+        <button key={chain.id} disabled={isSwitchingNetwork} onClick={() => switchMetaMaskNetwork(chain.id)}>
           {chain.label}
         </button>
       ))}
       {Testnet_Chains.map((chain) => (
-        <button key={chain.id} disabled={isSwitchingNetwork} onClick={() => switchNetwork(chain.id)}>
+        <button key={chain.id} disabled={isSwitchingNetwork} onClick={() => switchMetaMaskNetwork(chain.id)}>
           {chain.label}
         </button>
       ))}
@@ -252,6 +295,13 @@ const NetworkSwitcher: React.FC = () => {
     [chainId]
   );
 
+  const switchToAvalancheFuji = async () => {
+    const response = await switchNetwork(avalancheFujiTestnetConfig.chainId, avalancheFujiTestnetConfig);
+    if (!response.success) {
+      console.error(response.errorData.message);
+    }
+  };
+
   if (!account) return null;
 
   return (
@@ -261,7 +311,7 @@ const NetworkSwitcher: React.FC = () => {
         {chainId !== '0xa869' && (connectedChain?.label ?? 'Unsupported Network')}
         {chainId === '0xa869' && 'Avalanche Fuji Testnet'}
       </p>
-      <button disabled={isSwitchingNetwork} onClick={() => switchNetwork('0xa869', avalancheFujiTestnetConfig)}>
+      <button disabled={isSwitchingNetwork} onClick={switchToAvalancheFuji}>
         Avalanche Fuji Testnet
       </button>
     </div>
@@ -289,17 +339,43 @@ const NetworkWatcher: React.FC = () => {
 The SDK also provide `useWallet` and `useEthSigner` hooks, which provides access to user's metamask wallet provider and ethereum signer. You can import and use these hooks to get access to wallet provider and signer, and interact with user's metamask wallet for message and transaction signing.
 
 ```tsx
-import React from 'react';
-import { useWallet, useEthSigner } from 'lync-wallet-sdk';
+import React, { useState } from 'react';
+import { useAccount, useEthSigner, useWallet } from 'lync-wallet-sdk';
 
-const UserWalletProvider: React.FC = () => {
+const SignPersonalMessage: React.FC = () => {
+  const { account } = useAccount();
   const { wallet } = useWallet();
-  const signer = useEthSigner();
 
-  console.info('User wallet provider: ', wallet);
+  const signer = useEthSigner();
   console.info('Ethereum signer: ', signer);
 
-  return null;
+  const [signedMessage, setSignedMessage] = useState<string | null>(null);
+
+  const signMessage = async () => {
+    if (!wallet || !account) return;
+
+    const signingMessage = `This message is a demo message signed by account: ${account}`;
+    const message = `0x${Buffer.from(signingMessage, 'utf8').toString('hex')}`;
+
+    try {
+      const signature = (await wallet.request({
+        method: 'personal_sign',
+        params: [message, account],
+      })) as string;
+
+      setSignedMessage(signature);
+    } catch (error) {
+      console.error(error);
+      setSignedMessage(null);
+    }
+  };
+
+  return (
+    <div>
+      {signedMessage && <p>{signedMessage}</p>}
+      <button onClick={signMessage}>Sign Message</button>
+    </div>
+  );
 };
 ```
 
@@ -334,6 +410,14 @@ enum SupportedChains {
   OptimismSepoliaTestnet = '0xaa37dc',
   SaigonTestnet = '0x7e5',
 }
+
+enum MetaMaskFunctionErrorCodes {
+  MetaMaskAddNetworkError = 'MetaMaskAddNetworkError',
+  MetaMaskConnectionError = 'MetaMaskConnectionError',
+  MetaMaskDisconnectError = 'MetaMaskDisconnectError',
+  MetaMaskProviderNotFound = 'MetaMaskProviderNotFound',
+  MetaMaskSwitchNetworkError = 'MetaMaskSwitchNetworkError',
+}
 ```
 
 ### Types
@@ -351,6 +435,12 @@ type MetamaskAddChainConfigurations = {
   blockExplorerUrls: Array<string>;
   rpcUrls: Array<string>;
   nativeCurrency: ChainNativeCurrency;
+};
+
+type MetaMaskFunctionErrorData<E = unknown> = {
+  error?: E;
+  code: MetaMaskFunctionErrorCodes;
+  message: string;
 };
 
 type EIP1193Provider = {

@@ -7,7 +7,7 @@ export const useEthSigner = () => {
 
   const signer = useMemo(() => {
     if (!provider) return undefined;
-    return new ethers.providers.Web3Provider(provider).getSigner();
+    return new ethers.providers.Web3Provider(provider)?.getSigner();
   }, [provider]);
 
   return signer;
