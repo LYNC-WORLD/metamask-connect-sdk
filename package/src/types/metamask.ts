@@ -1,3 +1,5 @@
+import { MetaMaskFunctionErrorCodes } from '@/enums';
+
 declare global {
   interface WindowEventMap {
     'eip6963:announceProvider': CustomEvent;
@@ -39,6 +41,22 @@ export type EIP1193Provider = {
   on: (event: string, callback: (arg: unknown) => void) => void;
 };
 
-export type NetworkSwitchError = {
+export type MetaMaskWalletError = {
   code: number;
+  message: string;
 };
+
+export type MetaMaskFunctionErrorData<E = unknown> = {
+  error?: E;
+  code: MetaMaskFunctionErrorCodes;
+  message: string;
+};
+
+export type MetaMaskFunctionReturn<E = unknown> =
+  | {
+      success: true;
+    }
+  | {
+      success: false;
+      errorData: MetaMaskFunctionErrorData<E>;
+    };

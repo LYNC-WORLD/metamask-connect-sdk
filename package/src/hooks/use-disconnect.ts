@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
 import { useMetaMask } from '@/contexts';
+import { MetaMaskFunctionErrorCodes } from '@/enums';
+import { MetaMaskFunctionReturn } from '@/types';
+import { parseError } from '@/utils';
 
 export const useDisconnect = () => {
   const { provider, setAccount } = useMetaMask();
   const [isDisconnecting, setIsDisconnecting] = useState<boolean>(false);
 
-  const disconnect = React.useCallback(async () => {
-    if (!provider) return false;
+  const disconnect = React.useCallback(async (): Promise<MetaMaskFunctionReturn> => {
+    if (!provider)
+      return {
+        success: false,
+        errorData: {
+          code: MetaMaskFunctionErrorCodes.MetaMaskProviderNotFound,
+          message: 'MetaMask provider not found! Please install metamask from: https://metamask.io/download/',
+        },
+      };
 
     setIsDisconnecting(true);
     try {
@@ -16,10 +26,16 @@ export const useDisconnect = () => {
       });
       setAccount('');
 
-      return true;
+      return { success: true };
     } catch (error: unknown) {
-      console.error('Error disconnecting to MetaMask: ', error);
-      return false;
+      return {
+        success: false,
+        errorData: {
+          error,
+          code: MetaMaskFunctionErrorCodes.MetaMaskDisconnectError,
+          message: `Disconnect error: ${parseError(error, 'Error disconnecting to MetaMask.')}`,
+        },
+      };
     } finally {
       setIsDisconnecting(false);
     }

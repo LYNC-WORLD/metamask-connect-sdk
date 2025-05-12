@@ -1,3 +1,11 @@
+export enum MetaMaskFunctionErrorCodes {
+  MetaMaskAddNetworkError = 'MetaMaskAddNetworkError',
+  MetaMaskConnectionError = 'MetaMaskConnectionError',
+  MetaMaskDisconnectError = 'MetaMaskDisconnectError',
+  MetaMaskProviderNotFound = 'MetaMaskProviderNotFound',
+  MetaMaskSwitchNetworkError = 'MetaMaskSwitchNetworkError',
+}
+
 export enum SupportedChains {
   EthereumMainnet = '0x1',
   BaseMainnet = '0x2105',

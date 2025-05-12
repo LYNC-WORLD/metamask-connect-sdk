@@ -3,16 +3,37 @@ import '../assets/styles.css';
 
 import { useAccount, useConnect, useCopy } from '@/hooks';
 import { collapseAddress } from '@/utils';
+import { MetaMaskFunctionErrorCodes } from '@/enums';
+import { MetaMaskFunctionErrorData } from '@/types';
 
-export const MetamaskConnect: React.FC = () => {
+type MetamaskConnectProps = {
+  onError: (error: MetaMaskFunctionErrorData) => unknown;
+  onSuccess: () => unknown;
+};
+
+export const MetamaskConnect: React.FC<Readonly<Partial<MetamaskConnectProps>>> = ({ onError, onSuccess }) => {
   const { account } = useAccount();
   const { isConnecting, connect } = useConnect();
   const { copied, copyToClipboard } = useCopy();
 
+  const connectToMetaMask = async () => {
+    const response = await connect();
+
+    if (response.success && onSuccess) onSuccess();
+    if (!response.success && response.errorData.code === MetaMaskFunctionErrorCodes.MetaMaskProviderNotFound)
+      window.open('https://metamask.io/download/', '_blank');
+    if (!response.success && response.errorData.code !== MetaMaskFunctionErrorCodes.MetaMaskProviderNotFound && onError)
+      onError(response.errorData);
+  };
+
   return (
     <React.Fragment>
       {!account && (
-        <button disabled={isConnecting} className="LYNCMetaMaskConnectSDK__metamask_connect_btn" onClick={connect}>
+        <button
+          disabled={isConnecting}
+          className="LYNCMetaMaskConnectSDK__metamask_connect_btn"
+          onClick={connectToMetaMask}
+        >
           Connect Metamask
         </button>
       )}
