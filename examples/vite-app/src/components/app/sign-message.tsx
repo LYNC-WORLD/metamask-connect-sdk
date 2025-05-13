@@ -29,7 +29,7 @@ export const SignMessage: React.FC = () => {
 
       setSignedMessage(signature);
     } catch (error) {
-      console.error(error);
+      console.error('Error signing message in MetaMask: ', error);
       toast.error(parseError(error, 'Error signing message in MetaMask.'));
       setSignedMessage(null);
     } finally {
@@ -40,7 +40,7 @@ export const SignMessage: React.FC = () => {
   if (!account) return null;
 
   return (
-    <div className="flex w-[320px] flex-col gap-2 md:gap-4 mt-4">
+    <div className="flex w-[320px] flex-col gap-2 md:gap-4">
       <div className="border flex-1 rounded-md p-4 bg-muted/50 flex flex-col">
         <button
           className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase flex items-center justify-between disabled:cursor-default"

@@ -1,5 +1,6 @@
 export * from './store';
 export * from './use-account';
+export * from './use-balance';
 export * from './use-connect';
 export * from './use-copy';
 export * from './use-disconnect';

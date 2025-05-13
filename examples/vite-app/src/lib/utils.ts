@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { ethers } from 'ethers';
 import { twMerge } from 'tailwind-merge';
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -27,4 +28,18 @@ export const parseError = (error: unknown, defaultMessage?: string): string => {
     return String(error.message);
 
   return defaultMessage ?? 'Something went wrong!';
+};
+
+export const validateToAddress = (connectedAddress: string, transferAddress: string) => {
+  if (connectedAddress.toLowerCase() === transferAddress.toLowerCase())
+    return { error: 'Receiver address cannot be same as sender address.' };
+
+  const validAddress = ethers.utils.isAddress(transferAddress);
+  if (!validAddress) return { error: 'Please enter a valid receiver address.' };
+};
+
+export const validateTransferAmount = (balance: number, transferAmount: number) => {
+  if (balance <= 0) return { error: 'Account balance is too low.' };
+  if (transferAmount <= 0) return { error: 'Transfer amount must be greater than 0.' };
+  if (transferAmount > balance) return { error: 'Transfer amount cannot be greater than available balance.' };
 };

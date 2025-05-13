@@ -34,7 +34,7 @@ export const SwitchNetwork: React.FC = () => {
   if (!account) return null;
 
   return (
-    <div className="flex w-[320px] flex-col gap-2 md:gap-4 mt-4">
+    <div className="flex w-[320px] flex-col gap-2 md:gap-4">
       <div className="w-full border flex-1 rounded-md p-4 bg-muted/50">
         <div className="flex flex-col">
           <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">

@@ -2,7 +2,7 @@ import type React from 'react';
 import { MetamaskConnect, useAccount, useDisconnect } from 'lync-wallet-sdk';
 import toast from 'react-hot-toast';
 import { MdOutlineLogout } from 'react-icons/md';
-import { SignMessage, SwitchNetwork } from './components/app';
+import { CoinTransferTransaction, SignMessage, SwitchNetwork } from './components/app';
 import { AppLayout } from './components/layouts';
 import { Button } from './components/ui/button';
 
@@ -33,9 +33,12 @@ export const MetaMaskConnectExample: React.FC = () => {
           </Button>
         )}
       </div>
-      <div className="flex flex-col md:flex-row md:gap-4">
+      <div className="flex flex-col md:flex-row gap-4 mt-4">
         <SwitchNetwork />
         <SignMessage />
+      </div>
+      <div className="flex flex-col md:flex-row gap-4 mt-4 w-full max-w-[320px] md:max-w-[656px]">
+        <CoinTransferTransaction />
       </div>
     </AppLayout>
   );
