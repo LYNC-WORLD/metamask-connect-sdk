@@ -1296,18 +1296,6 @@
     "@tailwindcss/oxide" "4.1.5"
     tailwindcss "4.1.5"
 
-"@tanstack/query-core@5.76.0":
-  version "5.76.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.76.0.tgz#3b4d5d34ce307ba0cf7d1a3e90d7adcdc6c46be0"
-  integrity sha512-FN375hb8ctzfNAlex5gHI6+WDXTNpe0nbxp/d2YJtnP+IBM6OUm7zcaoCW6T63BawGOYZBbKC0iPvr41TteNVg==
-
-"@tanstack/react-query@^5.76.0":
-  version "5.76.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.76.0.tgz#d6e797543e5b36007d2c144a347fd2effb18f0a4"
-  integrity sha512-dZLYzVuUFZJkenxd8o01oyFimeLBmSkaUviPHuDzXe7LSLO4WTTx92jwJlNUXOOHzg6t0XknklZ15cjhYNSDjA==
-  dependencies:
-    "@tanstack/query-core" "5.76.0"
-
 "@tybys/wasm-util@^0.9.0":
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/@tybys/wasm-util/-/wasm-util-0.9.0.tgz#3e75eb00604c8d6db470bf18c37b7d984a0e3355"
@@ -3198,10 +3186,10 @@ lucide-react@^0.507.0:
   resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.507.0.tgz#d93a75ed130bd530a368fe1dd4ea009ea90a772b"
   integrity sha512-XfgE6gvAHwAtnbUvWiTTHx4S3VGR+cUJHEc0vrh9Ogu672I1Tue2+Cp/8JJqpytgcBHAB1FVI297W4XGNwc2dQ==
 
-lync-wallet-sdk@^2.2.5:
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/lync-wallet-sdk/-/lync-wallet-sdk-2.2.5.tgz#f8c27a9311b526c6e61a2c2875878324fd26d148"
-  integrity sha512-Two/wHgTf4Hldp6kMgcRP1i1KrEL8Rem/hQIFiSdYaXEwpNDGJmW+oJfQg/zmdRFSx1QWd0ZzP/w5KNUq7tCMA==
+lync-wallet-sdk@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/lync-wallet-sdk/-/lync-wallet-sdk-2.2.6.tgz#4c7fb80cdabb21ae35c1ee06992b6f6648c6f356"
+  integrity sha512-G1txV5HHTUoHYAyULAQEaV/ml/JFrGGcVItGQvg2oTpMwzqH88dX/JBfPRj/ZVvGprjg+9zlFUMspYOOI6DXuw==
   dependencies:
     ethers "^5.7.0"
     react "18"
