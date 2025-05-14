@@ -3198,10 +3198,10 @@ lucide-react@^0.507.0:
   resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.507.0.tgz#d93a75ed130bd530a368fe1dd4ea009ea90a772b"
   integrity sha512-XfgE6gvAHwAtnbUvWiTTHx4S3VGR+cUJHEc0vrh9Ogu672I1Tue2+Cp/8JJqpytgcBHAB1FVI297W4XGNwc2dQ==
 
-lync-wallet-sdk@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/lync-wallet-sdk/-/lync-wallet-sdk-2.1.4.tgz#8341974f10ca1f2d10b50fa8b5e20d87fe5d132c"
-  integrity sha512-m/Yka9n5HYf9I7sW5QGpexCMRZVbtL0t1DRU8+USbrJoYgUhvwveGjNIlshMMUbVbhvfhQLSKwtoGoHgSM16ng==
+lync-wallet-sdk@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/lync-wallet-sdk/-/lync-wallet-sdk-2.2.5.tgz#f8c27a9311b526c6e61a2c2875878324fd26d148"
+  integrity sha512-Two/wHgTf4Hldp6kMgcRP1i1KrEL8Rem/hQIFiSdYaXEwpNDGJmW+oJfQg/zmdRFSx1QWd0ZzP/w5KNUq7tCMA==
   dependencies:
     ethers "^5.7.0"
     react "18"
