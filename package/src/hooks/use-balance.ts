@@ -1,33 +1,29 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
-import { useAccount } from './use-account';
-import { useNetwork } from './use-network';
-import { useWallet } from './use-wallet';
+import { useMetaMask } from '@/contexts';
 
 export const useBalance = () => {
-  const { account } = useAccount();
-  const { chainId } = useNetwork();
-  const { wallet } = useWallet();
+  const { account, chainId, provider } = useMetaMask();
 
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [balance, setBalance] = useState<string>('0');
 
   const fetchBalance = useCallback(async () => {
-    if (!wallet || !account) {
+    if (!provider || !account) {
       setBalance('0');
       return;
     }
 
     try {
-      const provider = new ethers.providers.Web3Provider(wallet);
-      const accountBalance = await provider.getBalance(account);
+      const wallet = new ethers.providers.Web3Provider(provider);
+      const accountBalance = await wallet.getBalance(account);
 
       setBalance(ethers.utils.formatEther(accountBalance));
     } catch (error: unknown) {
       console.error(`Error fetching balance for account - ${account}:`, error);
       setBalance('0');
     }
-  }, [account, wallet, chainId]);
+  }, [account, provider, chainId]);
 
   useEffect(() => {
     setIsFetching(true);

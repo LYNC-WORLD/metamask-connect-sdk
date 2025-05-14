@@ -43,3 +43,8 @@ export const validateTransferAmount = (balance: number, transferAmount: number) 
   if (transferAmount <= 0) return { error: 'Transfer amount must be greater than 0.' };
   if (transferAmount > balance) return { error: 'Transfer amount cannot be greater than available balance.' };
 };
+
+export const formatSenderAddress = (address: string) => {
+  if (!address || address.length <= 20) return address;
+  return `${address.substring(0, 12)}...${address.slice(-10)}`;
+};

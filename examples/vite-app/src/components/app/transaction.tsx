@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { ethers } from 'ethers';
-import { collapseAddress, SupportedChains, useAccount, useEthSigner, useNetwork, useWallet } from 'lync-wallet-sdk';
+import { SupportedChains, useAccount, useBalance, useEthSigner, useNetwork, useWallet } from 'lync-wallet-sdk';
 import toast from 'react-hot-toast';
 import { Native_Currency_Symbol } from '@/constants';
-import { useBalance } from '@/hooks';
-import { parseError, validateToAddress, validateTransferAmount } from '@/lib/utils';
+import { formatSenderAddress, parseError, validateToAddress, validateTransferAmount } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { ErrorList } from './error-list';
@@ -19,7 +18,7 @@ type TransactionParams = {
 
 export const CoinTransferTransaction: React.FC = () => {
   const { account } = useAccount();
-  const { balance, fetching: fetchingBalance, refetching: refetchingBalance, refetch: refetchBalance } = useBalance();
+  const { balance, isFetching: fetchingBalance, refetch: refetchBalance } = useBalance();
   const { chainId } = useNetwork();
   const { wallet } = useWallet();
   const signer = useEthSigner();
@@ -39,11 +38,11 @@ export const CoinTransferTransaction: React.FC = () => {
   }, [balance]);
 
   useMemo(() => {
-    if (fetchingBalance || refetchingBalance) return;
+    if (fetchingBalance) return;
 
     if (Number(balance) <= 0) setWarning('Your account balance is too low. Please top-up your account to send funds.');
     else setWarning('');
-  }, [balance, fetchingBalance, refetchingBalance]);
+  }, [balance, fetchingBalance]);
 
   const disableTransferFunds = useMemo(
     () => !toAddress || Number(amountToTransfer) <= 0 || Number(balance) <= 0 || performingTransactions,
@@ -91,6 +90,7 @@ export const CoinTransferTransaction: React.FC = () => {
 
     setAddressError(addressCheck?.error ?? '');
     setAmountError(amountCheck?.error ?? '');
+    setTransactionHash('');
 
     if (addressCheck?.error || amountCheck?.error) return;
 
@@ -131,20 +131,20 @@ export const CoinTransferTransaction: React.FC = () => {
   return (
     <div className="flex w-full flex-col gap-2 md:gap-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
-        <div className="grid grid-cols-2 border rounded-md py-4 bg-muted/50">
-          <div className="px-4 border-r flex flex-col">
+        <div className="flex flex-col border rounded-md p-4 bg-muted/50">
+          <div className="flex flex-col">
             <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">From</span>
-            <p className="mt-1 border-t pt-1">{collapseAddress(account)}</p>
+            <p className="mt-1 border-t pt-1">{formatSenderAddress(account)}</p>
           </div>
-          <div className="px-4 flex flex-col">
+          <div className="flex flex-col mt-3">
             <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">Balance</span>
             <p className="mt-1 border-t pt-1">
               {readableBalance} {Native_Currency_Symbol[chainId as unknown as SupportedChains] ?? ''}
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-2 border rounded-md py-4 bg-muted/50">
-          <div className="flex flex-col px-4 border-r">
+        <div className="flex flex-col border rounded-md p-4 bg-muted/50">
+          <div className="flex flex-col">
             <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">To</span>
             <div className="mt-1 border py-1 px-1.5 rounded-[3px]">
               <Input
@@ -157,7 +157,7 @@ export const CoinTransferTransaction: React.FC = () => {
               />
             </div>
           </div>
-          <div className="px-4 flex flex-col">
+          <div className="flex flex-col mt-3">
             <div className="flex items-center justify-between gap-1">
               <span className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">Amount</span>
               <Button
